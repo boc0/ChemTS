@@ -46,7 +46,7 @@ def expanded_node(model,state,val):
     get_int=get_int_old
 
     x=np.reshape(get_int,(1,len(get_int)))
-    x_pad= sequence.pad_sequences(x, maxlen=82, dtype='int32',
+    x_pad= sequence.pad_sequences(x, maxlen=81, dtype='int32',
         padding='post', truncating='pre', value=0.)
 
     for i in range(30):
@@ -112,7 +112,7 @@ def chem_kn_simulation(model,state,val,added_nodes):
         get_int=get_int_old
 
         x=np.reshape(get_int,(1,len(get_int)))
-        x_pad= sequence.pad_sequences(x, maxlen=82, dtype='int32',
+        x_pad= sequence.pad_sequences(x, maxlen=81, dtype='int32',
             padding='post', truncating='pre', value=0.)
         while not get_int[-1] == val.index(end):
             predictions=model.predict(x_pad)
@@ -129,7 +129,7 @@ def chem_kn_simulation(model,state,val,added_nodes):
             next_int_test=sorted(range(len(a)), key=lambda i: a[i])[-10:]
             get_int.append(next_int)
             x=np.reshape(get_int,(1,len(get_int)))
-            x_pad = sequence.pad_sequences(x, maxlen=82, dtype='int32',
+            x_pad = sequence.pad_sequences(x, maxlen=81, dtype='int32',
                 padding='post', truncating='pre', value=0.)
             if len(get_int)>82:
                 break

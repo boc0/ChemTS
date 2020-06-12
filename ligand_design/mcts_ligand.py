@@ -17,6 +17,8 @@ from rdkit.Chem import Descriptors
 import sys
 from make_smile import zinc_data_with_bracket_original, zinc_processed_with_bracket
 from add_node_type import chem_kn_simulation, make_input_smile,predict_smile,check_node_type,node_to_add,expanded_node
+import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 

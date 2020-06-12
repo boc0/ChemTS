@@ -225,12 +225,12 @@ if __name__ == "__main__":
     X_train = X_train[:10000]
     y_train = y_train[:10000]
 
-    maxlen=81
+    maxlen=82
 
 
-    X= sequence.pad_sequences(X_train, maxlen=81, dtype='int32',
+    X= sequence.pad_sequences(X_train, maxlen=82, dtype='int32',
         padding='post', truncating='pre', value=0.)
-    y = sequence.pad_sequences(y_train, maxlen=81, dtype='int32',
+    y = sequence.pad_sequences(y_train, maxlen=82, dtype='int32',
         padding='post', truncating='pre', value=0.)
 
 
