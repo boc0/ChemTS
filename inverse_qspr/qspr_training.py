@@ -34,9 +34,9 @@ def organic():
     reader = csv.reader(f)
     for row in reader:
         #word_space[row].append(reader[row])
-        #print word_sapce
+        #print(word_sapce)
         sen_space.append(row)
-    #print sen_space
+    #print(sen_space)
     f.close()
 
     #element_table=["Cu","Ti","Zr","Ga","Ge","As","Se","Br","Si","Zn","Cl","Be","Ca","Na","Sr","Ir","Li","Rb","Cs","Fr","Be","Mg",
@@ -44,19 +44,19 @@ def organic():
     #        "Ir","Mt","Ni","Pd","Pt","Ds","Cu","Ag","Au","Rg","Zn","Cd","Hg","Cn","Al","Ga","In","Tl","Nh","Si","Ge","Sn","Pb","Fl",
     #        "As","Sb","Bi","Mc","Se","Te","Po","Lv","Cl","Br","At","Ts","He","Ne","Ar","Kr","Xe","Rn","Og"]
     element_table=["C","N","O","P","S","F","Cl","Br","I","(",")","=","#"]
-    #print sen_space
+    #print(sen_space)
     word1=sen_space[0]
     word_space=list(word1[0])
     end="\n"
-    #print word1
-    #print word_space
+    #print(word1)
+    #print(word_space)
     all_smile=[]
     organic_smile=[]
     t=0
-    #print sen_space
+    #print(sen_space)
 
     while t <len(sen_space):
-        #print t
+        #print(t)
         word1=sen_space[t]
         word_space=list(word1[0])
         word=[]
@@ -65,9 +65,9 @@ def organic():
 
         t=t+1
 
-    #print len(organic_smile)
-    #print len(organic_smile)
-    #print organic_smile
+    #print(len(organic_smile))
+    #print(len(organic_smile))
+    #print(organic_smile)
 
     return organic_smile
 
@@ -77,7 +77,7 @@ def organic():
 
 
 def process_organic(sen_space):
-    #print sen_space
+    #print(sen_space)
     all_smile=[]
     end="\n"
     element_table=["C","N","B","O","P","S","F","Cl","Br","I","(",")","=","#"]
@@ -138,11 +138,11 @@ def prepare_data(smile):
             a=list(fp1.ToBitString())
             X_train.append(a)
         else:
-            print i
-            print smile[i]
+            print(i)
+            print(smile[i])
 
     X_train_final=np.matrix(X_train)
-    print X_train_final.shape
+    print(X_train_final.shape)
 
     return X_train_final
 
@@ -152,7 +152,7 @@ def prepare_y_data():
     y = list(reader)
 
     result = np.array(y).astype('float')
-    #print result.shape
+    #print(result.shape)
     arr = np.delete(result, 16538, axis=0)
     return arr
 

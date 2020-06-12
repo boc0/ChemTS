@@ -8,7 +8,7 @@
 #
 # several small modifications to the original paper are included
 # particularly slightly different formula for marocyclic penalty
-# and taking into account also molecule symmetry (fingerprint density)
+# and taking into account also molecule symmetry (fingerprint(density))
 #
 # for a set of 10k diverse molecules the agreement between the original method
 # as implemented in PipelinePilot and this implementation is r2 = 0.97
@@ -82,7 +82,7 @@ def calculateScore(m):
 
   score2 = 0. -sizePenalty -stereoPenalty -spiroPenalty -bridgePenalty -macrocyclePenalty
 
-  # correction for the fingerprint density
+  # correction for the fingerprint(density)
   # not in the original publication, added in version 1.1
   # to make highly symmetrical molecules easier to synthetise
   score3 = 0.
@@ -98,17 +98,17 @@ def calculateScore(m):
   # smooth the 10-end
   if sascore > 8.: sascore = 8. + math.log(sascore+1.-9.)
   if sascore > 10.: sascore = 10.0
-  elif sascore < 1.: sascore = 1.0 
+  elif sascore < 1.: sascore = 1.0
 
   return sascore
-    
+
 
 def processMols(mols):
   print('smiles\tName\tsa_score')
   for i,m in enumerate(mols):
     if m is None:
       continue
- 
+
     s = calculateScore(m)
 
     smiles = Chem.MolToSmiles(m)
@@ -129,23 +129,23 @@ if __name__=='__main__':
 
   print('Reading took %.2f seconds. Calculating took %.2f seconds'%((t2-t1),(t4-t3)), file=sys.stderr)
 
-  
+
 #
 #  Copyright (c) 2013, Novartis Institutes for BioMedical Research Inc.
 #  All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
-# met: 
+# met:
 #
-#     * Redistributions of source code must retain the above copyright 
+#     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above
-#       copyright notice, this list of conditions and the following 
-#       disclaimer in the documentation and/or other materials provided 
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
 #       with the distribution.
-#     * Neither the name of Novartis Institutes for BioMedical Research Inc. 
-#       nor the names of its contributors may be used to endorse or promote 
+#     * Neither the name of Novartis Institutes for BioMedical Research Inc.
+#       nor the names of its contributors may be used to endorse or promote
 #       products derived from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS

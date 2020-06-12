@@ -17,14 +17,14 @@ def zinc_data_with_bracket():
     sen_space=[]
     #f = open('/Users/yang/smiles.csv', 'rb')
     #f = open('/Users/yang/LSTM-chemical-project/smile_trainning.csv', 'rb')
-    f = open('/home/yang/LSTM-chemical-project/data/250k_rndm_zinc_drugs_clean.smi', 'rb')
+    f = open('/home/yang/LSTM-chemical-project/data/250k_rndm_zinc_drugs_clean.smi', 'r')
 
     reader = csv.reader(f)
     for row in reader:
         #word_space[row].append(reader[row])
-        #print word_sapce
+        #print(word_sapce)
         sen_space.append(row)
-    #print sen_space
+    #print(sen_space)
     f.close()
 
     word1=sen_space[0]
@@ -41,10 +41,10 @@ def zinc_data_with_bracket():
         s=Chem.MolToSmiles(m,kekuleSmiles=True)
         zinc_processed.append(s)
         #word_space=list(word1[0])
-    #print len(zinc_processed)
+    #print(len(zinc_processed))
 
     while t <len(zinc_processed):
-        #print t
+        #print(t)
         word2=zinc_processed[t]
         word_space=list(word2)
         word=[]
@@ -52,12 +52,12 @@ def zinc_data_with_bracket():
         organic_smile.append(word_space)
         t=t+1
 
-    #print len(organic_smile)
-    #print organic_smile
+    #print(len(organic_smile))
+    #print(organic_smile)
     return organic_smile
 
 def zinc_processed_with_bracket(sen_space):
-    #print sen_space
+    #print(sen_space)
     all_smile=[]
     length=[]
     end="\n"
@@ -106,22 +106,22 @@ def zinc_processed_with_bracket(sen_space):
         len1=len(word)
         length.append(len1)
         all_smile.append(list(word))
-    #print all_smile
+    #print(all_smile)
     val=["\n"]
     for i in range(len(all_smile)):
         for j in range(len(all_smile[i])):
             if all_smile[i][j] not in val:
                 val.append(all_smile[i][j])
-    #print val
+    #print(val)
     #val.remove("\n")
     #val.insert(0,"\n")
-    #print val
-    #print all_smile[0]
-    #print all_smile[1]
-    #print all_smile[2]
-    #print len(all_smile)
-    #print max(length)
-    #print len(val)
+    #print(val)
+    #print(all_smile[0])
+    #print(all_smile[1])
+    #print(all_smile[2])
+    #print(len(all_smile))
+    #print(max(length))
+    #print(len(val))
 
     return val, all_smile
 
@@ -145,8 +145,8 @@ def zinc_logp(smile):
 
     ma=6.66134
 
-    print max(logp_value)
-    print logp_value
+    print(max(logp_value))
+    print(logp_value)
 
 
 def zinc_data_with_bracket_original():
@@ -154,14 +154,14 @@ def zinc_data_with_bracket_original():
     sen_space=[]
     #f = open('/Users/yang/smiles.csv', 'rb')
     #f = open('/Users/yang/LSTM-chemical-project/smile_trainning.csv', 'rb')
-    f = open('../data/250k_rndm_zinc_drugs_clean.smi', 'rb')
+    f = open('../data/250k_rndm_zinc_drugs_clean.smi', 'r')
 
     reader = csv.reader(f)
     for row in reader:
         #word_space[row].append(reader[row])
-        #print word_sapce
+        #print(word_sapce)
         sen_space.append(row)
-    #print sen_space
+    #print(sen_space)
     f.close()
 
     word1=sen_space[0]
@@ -178,10 +178,10 @@ def zinc_data_with_bracket_original():
         #s=Chem.MolToSmiles(m,kekuleSmiles=True)
         zinc_processed.append(word1[0])
         #word_space=list(word1[0])
-    #print len(zinc_processed)
+    #print(len(zinc_processed))
 
     #while t <len(zinc_processed):
-    #    #print t
+    #    #print(t)
     #    word2=zinc_processed[t]
     #    word_space=list(word2)
     #    word=[]
@@ -189,9 +189,9 @@ def zinc_data_with_bracket_original():
     #    organic_smile.append(word_space)
     #    t=t+1
 
-    #print len(organic_smile)
-    #print organic_smile
-    #print zinc_processed[0]
+    #print(len(organic_smile))
+    #print(organic_smile)
+    #print(zinc_processed[0])
     return zinc_processed
 
 

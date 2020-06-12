@@ -22,6 +22,7 @@ import sascorer
 import pickle
 import gzip
 import networkx as nx
+
 from rdkit.Chem import rdmolops
 
 
@@ -49,7 +50,7 @@ def expanded_node(model,state,val):
 
     for i in range(30):
         predictions=model.predict(x_pad)
-        #print "shape of RNN",predictions.shape
+        #print("shape of RNN",predictions.shape)
         preds=np.asarray(predictions[0][len(get_int)-1]).astype('float64')
         preds = np.log(preds) / 1.0
         preds = np.exp(preds) / np.sum(np.exp(preds))
@@ -60,7 +61,7 @@ def expanded_node(model,state,val):
 
     all_nodes=list(set(all_nodes))
 
-    print all_nodes
+    print(all_nodes)
 
 
 
@@ -82,7 +83,7 @@ def node_to_add(all_nodes,val):
     for i in range(len(all_nodes)):
         added_nodes.append(val[all_nodes[i]])
 
-    print added_nodes
+    print(added_nodes)
 
     return added_nodes
 
@@ -98,9 +99,9 @@ def chem_kn_simulation(model,state,val,added_nodes):
         position=[]
         position.extend(state)
         position.append(added_nodes[i])
-        #print state
-        #print position
-        #print len(val2)
+        #print(state)
+        #print(position)
+        #print(len(val2))
         total_generated=[]
         new_compound=[]
         get_int_old=[]
@@ -114,13 +115,13 @@ def chem_kn_simulation(model,state,val,added_nodes):
             padding='post', truncating='pre', value=0.)
         while not get_int[-1] == val.index(end):
             predictions=model.predict(x_pad)
-            #print "shape of RNN",predictions.shape
+            #print("shape of RNN",predictions.shape)
             preds=np.asarray(predictions[0][len(get_int)-1]).astype('float64')
             preds = np.log(preds) / 1.0
             preds = np.exp(preds) / np.sum(np.exp(preds))
             next_probas = np.random.multinomial(1, preds, 1)
-            #print predictions[0][len(get_int)-1]
-            #print "next probas",next_probas
+            #print(predictions[0][len(get_int)-1])
+            #print("next probas",next_probas)
             #next_int=np.argmax(predictions[0][len(get_int)-1])
             next_int=np.argmax(next_probas)
             a=predictions[0][len(get_int)-1]
@@ -164,8 +165,8 @@ def make_input_smile(generate_smile):
             middle.append(generate_smile[i][j])
         com=''.join(middle)
         new_compound.append(com)
-    #print new_compound
-    #print len(new_compound)
+    #print(new_compound)
+    #print(len(new_compound))
 
     return new_compound
 
@@ -175,12 +176,12 @@ def check_node_type(new_compound,SA_mean,SA_std,logP_mean,logP_std,cycle_mean,cy
     logp_value=[]
     all_smile=[]
     distance=[]
-    #print "SA_mean:",SA_mean
-    #print "SA_std:",SA_std
-    #print "logP_mean:",logP_mean
-    #print "logP_std:",logP_std
-    #print "cycle_mean:",cycle_mean
-    #print "cycle_std:",cycle_std
+    #print("SA_mean:",SA_mean)
+    #print("SA_std:",SA_std)
+    #print("logP_mean:",logP_mean)
+    #print("logP_std:",logP_std)
+    #print("cycle_mean:",cycle_mean)
+    #print("cycle_std:",cycle_std)
     activity=[]
     score=[]
 
@@ -188,7 +189,7 @@ def check_node_type(new_compound,SA_mean,SA_std,logP_mean,logP_std,cycle_mean,cy
         try:
             m = Chem.MolFromSmiles(str(new_compound[i]))
         except:
-            print None
+            print(None)
         if m!=None and len(new_compound[i])<=81:
             try:
                 logp=Descriptors.MolLogP(m)
@@ -207,9 +208,9 @@ def check_node_type(new_compound,SA_mean,SA_std,logP_mean,logP_std,cycle_mean,cy
             else:
                 cycle_length = cycle_length - 6
             cycle_score = -cycle_length
-                #print cycle_score
-                #print SA_score
-                #print logp
+                #print(cycle_score)
+                #print(SA_score)
+                #print(logp)
             SA_score_norm=(SA_score-SA_mean)/SA_std
             logp_norm=(logp-logP_mean)/logP_std
             cycle_score_norm=(cycle_score-cycle_mean)/cycle_std
@@ -221,7 +222,7 @@ def check_node_type(new_compound,SA_mean,SA_std,logP_mean,logP_std,cycle_mean,cy
     return node_index,score,valid_compound,all_smile
 
 def logp_calculation(new_compound):
-    print new_compound[0]
+    print(new_compound[0])
     logp_value=[]
     valid_smile=[]
     all_smile=[]

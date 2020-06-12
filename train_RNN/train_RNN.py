@@ -19,11 +19,14 @@ import sys
 from keras.utils.np_utils import to_categorical
 from keras.preprocessing import sequence
 from keras.models import model_from_json
+import tensorflow as tf
 #from make_smile import ziprocess_organic,process_zinc_data
 from make_smile import zinc_data_with_bracket_original,zinc_processed_with_bracket
 
 from keras.layers import Conv1D, MaxPooling1D
 #from combine_bond_atom import organic, process_organic,bond_atom
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def load_data():
 
@@ -32,26 +35,26 @@ def load_data():
     reader = csv.reader(f)
     for row in reader:
         #word_space[row].append(reader[row])
-        #print word_sapce
+        #print(word_sapce)
         sen_space.append(row)
-    #print sen_space
+    #print(sen_space)
     f.close()
 
     element_table=["Cu","Ti","Zr","Ga","Ge","As","Se","Br","Si","Zn","Cl","Be","Ca","Na","Sr","Ir","Li","Rb","Cs","Fr","Be","Mg",
             "Ca","Sr","Ba","Ra","Sc","La","Ac","Ti","Zr","Nb","Ta","Db","Cr","Mo","Sg","Mn","Tc","Re","Bh","Fe","Ru","Os","Hs","Co","Rh",
             "Ir","Mt","Ni","Pd","Pt","Ds","Cu","Ag","Au","Rg","Zn","Cd","Hg","Cn","Al","Ga","In","Tl","Nh","Si","Ge","Sn","Pb","Fl",
             "As","Sb","Bi","Mc","Se","Te","Po","Lv","Cl","Br","At","Ts","He","Ne","Ar","Kr","Xe","Rn","Og"]
-    #print sen_space
+    #print(sen_space)
     word1=sen_space[0]
     word_space=list(word1[0])
     end="\n"
     #start="st"
     #word_space.insert(0,end)
     word_space.append(end)
-    #print word_space
-    #print len(sen_space)
+    #print(word_space)
+    #print(len(sen_space))
     all_smile=[]
-    #print word_space
+    #print(word_space)
     #for i in range(len(all_smile)):
 
     for i in range(len(sen_space)):
@@ -78,13 +81,13 @@ def load_data():
 
         word.append(end)
         all_smile.append(list(word))
-    #print all_smile
+    #print(all_smile)
     val=[]
     for i in range(len(all_smile)):
         for j in range(len(all_smile[i])):
             if all_smile[i][j] not in val:
                 val.append(all_smile[i][j])
-    #print val
+    #print(val)
     val.remove("\n")
     val.insert(0,"\n")
 
@@ -99,26 +102,26 @@ def organic_data():
     reader = csv.reader(f)
     for row in reader:
         #word_space[row].append(reader[row])
-        #print word_sapce
+        #print(word_sapce)
         sen_space.append(row)
-    #print sen_space
+    #print(sen_space)
     f.close()
 
     element_table=["Cu","Ti","Zr","Ga","Ge","As","Se","Br","Si","Zn","Cl","Be","Ca","Na","Sr","Ir","Li","Rb","Cs","Fr","Be","Mg",
             "Ca","Sr","Ba","Ra","Sc","La","Ac","Ti","Zr","Nb","Ta","Db","Cr","Mo","Sg","Mn","Tc","Re","Bh","Fe","Ru","Os","Hs","Co","Rh",
             "Ir","Mt","Ni","Pd","Pt","Ds","Cu","Ag","Au","Rg","Zn","Cd","Hg","Cn","Al","Ga","In","Tl","Nh","Si","Ge","Sn","Pb","Fl",
             "As","Sb","Bi","Mc","Se","Te","Po","Lv","Cl","Br","At","Ts","He","Ne","Ar","Kr","Xe","Rn","Og"]
-    #print sen_space
+    #print(sen_space)
     word1=sen_space[0]
     word_space=list(word1[0])
     end="\n"
     #start="st"
     #word_space.insert(0,end)
     word_space.append(end)
-    #print word_space
-    #print len(sen_space)
+    #print(word_space)
+    #print(len(sen_space))
     all_smile=[]
-    #print word_space
+    #print(word_space)
     #for i in range(len(all_smile)):
 
     for i in range(len(sen_space)):
@@ -145,13 +148,13 @@ def organic_data():
 
         word.append(end)
         all_smile.append(list(word))
-    #print all_smile
+    #print(all_smile)
     val=[]
     for i in range(len(all_smile)):
         for j in range(len(all_smile[i])):
             if all_smile[i][j] not in val:
                 val.append(all_smile[i][j])
-    #print val
+    #print(val)
     val.remove("\n")
     val.insert(0,"\n")
 
@@ -193,9 +196,9 @@ def generate_smile(model,val):
                 sm.append(np.argmax(predictions[i][j]))
             smf.append(sm)
 
-        #print sm
-        #print smf
-        #print len(sm)
+        #print(sm)
+        #print(smf)
+        #print(len(sm))
 
         new_smile.append(sampled_word)
     #sentence_str = [index_to_word[x] for x in new_sentence[1:-1]]
@@ -206,10 +209,10 @@ def generate_smile(model,val):
 def save_model(model):
     # serialize model to JSON
     model_json = model.to_json()
-    with open("model.json", "w") as json_file:
+    with open("models/model.json", "w") as json_file:
         json_file.write(model_json)
     # serialize weights to HDF5
-    model.save_weights("model.h5")
+    model.save_weights("models/model.h5")
     print("Saved model to disk")
 
 if __name__ == "__main__":
@@ -218,7 +221,10 @@ if __name__ == "__main__":
     print(valcabulary)
     print(len(all_smile))
     X_train,y_train=prepare_data(valcabulary,all_smile)
-  
+
+    X_train = X_train[:10000]
+    y_train = y_train[:10000]
+
     maxlen=81
 
 
@@ -226,23 +232,27 @@ if __name__ == "__main__":
         padding='post', truncating='pre', value=0.)
     y = sequence.pad_sequences(y_train, maxlen=81, dtype='int32',
         padding='post', truncating='pre', value=0.)
-    
-    
+
+
     y_train_one_hot = np.array([to_categorical(sent_label, num_classes=len(valcabulary)) for sent_label in y])
-    print (y_train_one_hot.shape)
+    print((y_train_one_hot.shape))
 
     vocab_size=len(valcabulary)
     embed_size=len(valcabulary)
 
-    
+
     N=X.shape[1]
 
+    # with open('models/model.json') as model_file:
+    #     text = model_file.read()
+    #     model = model_from_json(text)
+    # model.load_weights('models/model.h5')
 
     model = Sequential()
 
     model.add(Embedding(input_dim=vocab_size, output_dim=len(valcabulary), input_length=N,mask_zero=False))
-    model.add(GRU(output_dim=256, input_shape=(81,64),activation='tanh',return_sequences=True))
-    #model.add(LSTM(output_dim=256, input_shape=(81,64),activation='tanh',return_sequences=True))
+    model.add(GRU(output_dim=256, input_shape=(82,64),activation='tanh',return_sequences=True))
+    #model.add(LSTM(output_dim=256, input_shape=(82,64),activation='tanh',return_sequences=True))
     model.add(Dropout(0.2))
     model.add(GRU(256,activation='tanh',return_sequences=True))
     #model.add(LSTM(output_dim=1000, activation='sigmoid',return_sequences=True))
@@ -251,5 +261,11 @@ if __name__ == "__main__":
     optimizer=Adam(lr=0.01)
     print(model.summary())
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-    model.fit(X,y_train_one_hot,nb_epoch=100, batch_size=512,validation_split=0.1)
+
+    callbacks = [
+        tf.keras.callbacks.EarlyStopping(patience=2),
+        tf.keras.callbacks.ModelCheckpoint(filepath='models/model.{epoch:02d}-{val_loss:.2f}.h5'),
+    ]
+
+    model.fit(X,y_train_one_hot,nb_epoch=10, batch_size=512,validation_split=0.1, callbacks=callbacks)
     save_model(model)

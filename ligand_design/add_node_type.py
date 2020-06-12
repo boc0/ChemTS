@@ -3,7 +3,6 @@ from math import *
 import random
 import numpy as np
 from copy import deepcopy
-from types import IntType, ListType, TupleType, StringTypes
 import itertools
 import time
 import math
@@ -23,6 +22,7 @@ import sascorer
 import pickle
 import gzip
 import networkx as nx
+
 from rdkit.Chem import rdmolops
 
 
@@ -51,7 +51,7 @@ def expanded_node(model,state,val):
 
     for i in range(30):
         predictions=model.predict(x_pad)
-        #print "shape of RNN",predictions.shape
+        #print("shape of RNN",predictions.shape)
         preds=np.asarray(predictions[0][len(get_int)-1]).astype('float64')
         preds = np.log(preds) / 1.0
         preds = np.exp(preds) / np.sum(np.exp(preds))
@@ -62,7 +62,7 @@ def expanded_node(model,state,val):
 
     all_nodes=list(set(all_nodes))
 
-    print all_nodes
+    print(all_nodes)
 
 
 
@@ -84,7 +84,7 @@ def node_to_add(all_nodes,val):
     for i in range(len(all_nodes)):
         added_nodes.append(val[all_nodes[i]])
 
-    print added_nodes
+    print(added_nodes)
 
     return added_nodes
 
@@ -100,9 +100,9 @@ def chem_kn_simulation(model,state,val,added_nodes):
         position=[]
         position.extend(state)
         position.append(added_nodes[i])
-        #print state
-        #print position
-        #print len(val2)
+        #print(state)
+        #print(position)
+        #print(len(val2))
         total_generated=[]
         new_compound=[]
         get_int_old=[]
@@ -116,13 +116,13 @@ def chem_kn_simulation(model,state,val,added_nodes):
             padding='post', truncating='pre', value=0.)
         while not get_int[-1] == val.index(end):
             predictions=model.predict(x_pad)
-            #print "shape of RNN",predictions.shape
+            #print("shape of RNN",predictions.shape)
             preds=np.asarray(predictions[0][len(get_int)-1]).astype('float64')
             preds = np.log(preds) / 1.0
             preds = np.exp(preds) / np.sum(np.exp(preds))
             next_probas = np.random.multinomial(1, preds, 1)
-            #print predictions[0][len(get_int)-1]
-            #print "next probas",next_probas
+            #print(predictions[0][len(get_int)-1])
+            #print("next probas",next_probas)
             #next_int=np.argmax(predictions[0][len(get_int)-1])
             next_int=np.argmax(next_probas)
             a=predictions[0][len(get_int)-1]
@@ -166,8 +166,8 @@ def make_input_smile(generate_smile):
             middle.append(generate_smile[i][j])
         com=''.join(middle)
         new_compound.append(com)
-    #print new_compound
-    #print len(new_compound)
+    #print(new_compound)
+    #print(len(new_compound))
 
     return new_compound
 
@@ -183,10 +183,10 @@ def check_node_type(new_compound):
     for i in range(len(new_compound)):
         try:
             ko = Chem.MolFromSmiles(new_compound[i])
-            
+
         except:
             ko=None
-        
+
         if ko!=None:
             try:
                 molscore=MolFromSmiles(new_compound[i])
@@ -194,7 +194,7 @@ def check_node_type(new_compound):
                 molscore=None
             if molscore!=None:
                 SA_score = -sascorer.calculateScore(molscore)
-            esle:
+            else:
                 SA_score=1000
             cycle_list = nx.cycle_basis(nx.Graph(rdmolops.GetAdjacencyMatrix(MolFromSmiles(new_compound[i]))))
             if len(cycle_list) == 0:

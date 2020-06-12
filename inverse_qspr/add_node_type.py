@@ -22,6 +22,7 @@ import sascorer
 import pickle
 import gzip
 import networkx as nx
+
 from rdkit.Chem import rdmolops
 
 
@@ -186,7 +187,7 @@ def check_node_type(new_compound,qspr_model):
         if m!=None and len(new_compound[i])<=81:
             node_index.append(i)
             valid_compound.append(new_compound[i])
-            
+
             cycle_list = nx.cycle_basis(nx.Graph(rdmolops.GetAdjacencyMatrix(MolFromSmiles(new_compound[i]))))
             if len(cycle_list) == 0:
                 cycle_length = 0

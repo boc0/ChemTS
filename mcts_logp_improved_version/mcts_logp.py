@@ -108,17 +108,17 @@ def MCTS(root, verbose = False):
     """----------------------------------------------------------------------"""
 
     while maxnum<10100:
-        print maxnum
+        print(maxnum)
         node = rootnode
         state = root.Clone()
         """selection step"""
         node_pool=[]
-        print "current found max_score:",max_score
+        print("current found max_score:",max_score)
 
         while node.childNodes!=[]:
             node = node.Selectnode()
             state.SelectPosition(node.position)
-        print "state position:,",state.position
+        print("state position:,",state.position)
         depth.append(len(state.position))
         if len(state.position)>=81:
             re=-1.0
@@ -140,7 +140,7 @@ def MCTS(root, verbose = False):
 
             node_index,score,valid_smile,all_smile=check_node_type(new_compound,SA_mean,SA_std,logP_mean,logP_std,cycle_mean,cycle_std)
 
-            print node_index
+            print(node_index)
             valid_compound.extend(valid_smile)
             all_simulated_compound.extend(all_smile)
             all_score.extend(score)
@@ -183,7 +183,7 @@ def MCTS(root, verbose = False):
                         maxscore10000=max_score
                         #valid10000=10000*1.0/len(all_simulated_compound)
                     """backpropation step"""
-                #print "node pool length:",len(node.childNodes)
+                #print("node pool length:",len(node.childNodes))
 
                 for i in range(len(node_pool)):
 
@@ -193,7 +193,7 @@ def MCTS(root, verbose = False):
                         node = node.parentNode
 
             #finish_iteration_time=time.time()-iteration_time
-            #print "four step time:",finish_iteration_time
+            #print("four step time:",finish_iteration_time)
 
 
 
@@ -202,27 +202,27 @@ def MCTS(root, verbose = False):
 
         """check if found the desired compound"""
 
-    #print "all valid compounds:",valid_compound
+    #print("all valid compounds:",valid_compound)
 
     finished_run_time=time.time()-start_time
 
-    print "logp max found:", current_score
-    #print "length of score:",len(current_score)
-    #print "time:",time_distribution
+    print("logp max found:", current_score)
+    #print("length of score:",len(current_score))
+    #print("time:",time_distribution)
 
-    print "valid_com=",valid_compound
-    print "num_valid:", len(valid_compound)
-    print "all compounds:",len(all_simulated_compound)
-    print "score=", all_score
-    print "depth=",depth
-    print len(depth)
-    print "runtime",finished_run_time
-    #print "num_searched=",num_searched
-    print "100 max:",maxscore100,time100
-    print "500 max:",maxscore500,time500
-    print "1000 max:",maxscore1000,time1000
-    print "5000 max:",maxscore5000,time5000
-    print "10000 max:",maxscore10000,time10000
+    print("valid_com=",valid_compound)
+    print("num_valid:", len(valid_compound))
+    print("all compounds:",len(all_simulated_compound))
+    print("score=", all_score)
+    print("depth=",depth)
+    print(len(depth))
+    print("runtime",finished_run_time)
+    #print("num_searched=",num_searched)
+    print("100 max:",maxscore100,time100)
+    print("500 max:",maxscore500,time500)
+    print("1000 max:",maxscore1000,time1000)
+    print("5000 max:",maxscore5000,time5000)
+    print("10000 max:",maxscore10000,time10000)
     return valid_compound
 
 
@@ -239,14 +239,14 @@ def UCTchemical():
 if __name__ == "__main__":
     smile_old=zinc_data_with_bracket_original()
     val,smile=zinc_processed_with_bracket(smile_old)
-    print val
+    print(val)
     #val=['\n', '&', 'C', '(', ')', 'c', '1', '2', 'o', '=', 'O', 'N', '3', 'F', '[C@@H]', 'n', '#', 'S', 'Cl', '[O-]', '[C@H]', '[NH+]', '[C@]', 's', 'Br' '[nH]', '[NH3+]', '4', '[NH2+]', '[C@@]', '[N+]', '[nH+]', '[N-]', '[n+]', 'I', '[n-]', '[OH+]', '[NH-]', '[o+]', '[CH2-]', '[CH-]', '[O+]']
 
     logP_values = np.loadtxt('logP_values.txt')
     SA_scores = np.loadtxt('SA_scores.txt')
     cycle_scores = np.loadtxt('cycle_scores.txt')
     SA_mean =  np.mean(SA_scores)
-    print len(SA_scores)
+    print(len(SA_scores))
 
     SA_std=np.std(SA_scores)
     logP_mean = np.mean(logP_values)
