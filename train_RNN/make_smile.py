@@ -57,7 +57,6 @@ def zinc_data_with_bracket():
     return organic_smile
 
 def zinc_processed_with_bracket(sen_space):
-    #print(sen_space)
     all_smile=[]
     length=[]
     end="\n"
@@ -154,7 +153,7 @@ def zinc_data_with_bracket_original():
     sen_space=[]
     #f = open('/Users/yang/smiles.csv', 'rb')
     #f = open('/Users/yang/LSTM-chemical-project/smile_trainning.csv', 'rb')
-    f = open('../data/250k_rndm_zinc_drugs_clean.smi', 'r')
+    f = open('../data/qm9.smi', 'r')
 
     reader = csv.reader(f)
     for row in reader:

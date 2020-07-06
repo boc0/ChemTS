@@ -222,15 +222,15 @@ if __name__ == "__main__":
     print(len(all_smile))
     X_train,y_train=prepare_data(valcabulary,all_smile)
 
-    X_train = X_train[:10000]
-    y_train = y_train[:10000]
+    # X_train = X_train[:10000]
+    # y_train = y_train[:10000]
 
-    maxlen=82
+    maxlen=30
 
 
-    X= sequence.pad_sequences(X_train, maxlen=82, dtype='int32',
+    X= sequence.pad_sequences(X_train, maxlen=maxlen, dtype='int32',
         padding='post', truncating='pre', value=0.)
-    y = sequence.pad_sequences(y_train, maxlen=82, dtype='int32',
+    y = sequence.pad_sequences(y_train, maxlen=maxlen, dtype='int32',
         padding='post', truncating='pre', value=0.)
 
 
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     model = Sequential()
 
     model.add(Embedding(input_dim=vocab_size, output_dim=len(valcabulary), input_length=N,mask_zero=False))
-    model.add(GRU(output_dim=256, input_shape=(82,64),activation='tanh',return_sequences=True))
+    model.add(GRU(output_dim=256, input_shape=(maxlen,64),activation='tanh',return_sequences=True))
     #model.add(LSTM(output_dim=256, input_shape=(82,64),activation='tanh',return_sequences=True))
     model.add(Dropout(0.2))
     model.add(GRU(256,activation='tanh',return_sequences=True))
@@ -263,9 +263,9 @@ if __name__ == "__main__":
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=2),
+        tf.keras.callbacks.EarlyStopping(patience=6),
         tf.keras.callbacks.ModelCheckpoint(filepath='models/model.{epoch:02d}-{val_loss:.2f}.h5'),
     ]
 
-    model.fit(X,y_train_one_hot,nb_epoch=10, batch_size=512,validation_split=0.1, callbacks=callbacks)
+    model.fit(X,y_train_one_hot,nb_epoch=20, batch_size=512,validation_split=0.1, callbacks=callbacks)
     save_model(model)
